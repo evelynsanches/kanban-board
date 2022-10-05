@@ -1,0 +1,62 @@
+<div class="root">
+  <div class="navbar has-background-dark">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <h1 class="app-name has-gradient-text">Kanban</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="board">
+    <div class="board-bar">
+      <p class="board-name">Board Name</p>
+    </div>
+
+    <div class="board-wrapper">
+      <div class="board-columns" cdkDropListGroup>
+        <div class="board-column" *ngFor="let column of board.columns">
+          <div class="column-title">
+            <div *ngIf="column.empty; else notEmpty">
+              <input
+                matInput
+                class="column-title"
+                placeholder="New Column"
+                #newColumnName
+              />
+              <button
+                mat-raised-button
+                color="primary"
+                class="button"
+                (click)="newColumn(newColumnName)"
+              >
+                Save
+              </button>
+            </div>
+            <ng-template #notEmpty> {{ column.name }}</ng-template>
+          </div>
+          <div
+            class="tasks-container"
+            cdkDropList
+            [cdkDropListData]="column.tasks"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <div class="task" *ngFor="let item of column.tasks" cdkDrag>
+              {{ item.description }}
+            </div>
+            <div class="task" *ngIf="!column.empty">
+              <input matInput placeholder="New Task" #newTaskName />
+              <button
+                mat-raised-button
+                color="primary"
+                class="button"
+                (click)="newTask(newTaskName, column)"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
